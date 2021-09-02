@@ -1,5 +1,5 @@
 drop table if exists pubtator.medic_diseases ;
-create table pubtator.medic_diseases (
+create table if not exists pubtator.medic_diseases (
 	DiseaseName varchar,
 	DiseaseID   varchar,
 	AltDiseaseIDs   varchar,
