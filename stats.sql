@@ -33,9 +33,16 @@ create materialized view pubtator.metrics as
 	from (
 		select a.forename, a.lastname, a2.value
 		from public.author a
-		join public.authoridentifier a2 on a.id = a2.authorid 
+		left join public.authoridentifier a2 on a.id = a2.authorid 
 		group by a.forename, a.lastname, a2.value 
 	) as foo
+	union 
+	select 
+		'total_n_articles' as metric,
+		count(distinct bp.pmid) as value 
+	from pubtator.bioconcepts2pubtatorcentral bp 
+	join pubtator.gene2ncbi gn2 on bp.concept_id = gn2.ncbi_id 
+	where "type" in ('Disease','Gene')
 ;
 
 -- top 100 most cited genes
@@ -101,7 +108,3 @@ create materialized view pubtator.top100_most_cited_diseases_year as
 	order by article_count desc
 	limit 100 
 ;
-	
-	
-	
-	
